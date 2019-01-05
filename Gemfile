@@ -87,6 +87,7 @@ end
 
 
 gem 'carrierwave'
+gem 'mini_magick'
 
 # jp_prefecture(都道府県)
 gem 'jp_prefecture'

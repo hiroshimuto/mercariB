@@ -3,7 +3,24 @@ class ProductsController < ApplicationController
   before_action :product_info, only: [:show, :item_show, :destroy]
 
   def new
-    @product.images.build
+   @product.images.build
+  end
+
+  def create
+    @product = Product.new(product_params)
+    @product.brand = Brand.find_or_create_by(name: @product.brand.name) if @product.brand.name
+
+    respond_to do |format|
+      if @product.save
+        params[:images][:image].each do |i|
+          @product.images.create(product_id: @product.id, image: i)
+        end
+        format.html { redirect_to root_path}
+        # redirect_to root_path
+      else
+        render action: :new
+      end
+    end
   end
 
   def show
@@ -19,7 +36,6 @@ class ProductsController < ApplicationController
     else @product.brand_id.present? || @product.category_id.present?
       @related_items = Product.where("brand_id = ? or category_id = ?", @product.brand_id, @product.category_id)
     end
-    # binding.pry
   end
 
   def destroy
@@ -36,15 +52,7 @@ class ProductsController < ApplicationController
     @image = @product.images[0]
   end
 
-  def create
-    @product = Product.new(product_params)
-    @product.brand = Brand.find_or_create_by(name: @product.brand.name) if @product.brand.name
-    if @product.save
-      redirect_to root_path
-    else
-      render action: :new
-    end
-  end
+
 
   def transaction
     @product = Product.find(params[:format])
@@ -85,7 +93,7 @@ class ProductsController < ApplicationController
       :shipping_method,
       :delivery_date,
       :prefecture,
-      images_attributes: [:id,:image],
+      images_attributes: [:id,:product_id, {image: []}],
       brand_attributes: [:name]
     ).merge(seller_id: current_user.id,sell_status_id: 1)
   end

@@ -6,7 +6,7 @@
 
   .l-contener
     .signup-panel__inner
-      = form_for(@product, url: sell_path, html: {method: :post}) do |f|
+      = form_for(@product, url: sell_path, html: {multiple: true ,method: :post}) do |f|
         .sell-contents
           %h2.l-single-head 商品の情報を入力
         / 画像投稿 ▼
@@ -16,18 +16,15 @@
             %span.form-require.sell 必須
           %p.sell-contents__comment 最大4枚までアップロードできます
           .sell-dropbox_container
-            = f.fields_for :images,multiple: true do |i|
-              %ul.sell-dropbox-items
-              .sell-dropbox-uploader
-                = i.label :image,class: 'sell-dropbox-uploader_container' do
+            = f.fields_for :images do |i|
+              .sell-dropbox-items
+                %ul.sell-dropbox-preview
+              .sell-dropbox-uploader#droparea
+                .sell-dropbox-uploader-container
                   .visible-pc#drop
-                    ドラッグアンド
-                    %br ドロップ
-                    または
-                    %br クリックして
-                    ファイルをアップロード
-                    %i.fas.fa-camera 🐢
-                  = i.file_field :image,multiple: true,class: "product_images"
+                    ドラッグアンドドロップ
+                    %br またはクリックしてファイルをアップロード
+                    = i.file_field :image, class: "product_images", id:"upload-form-0", multiple: true, name: "images[image][]"
 
         / 商品名・説明 ▼
         .sell-contents
