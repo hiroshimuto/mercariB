@@ -179,6 +179,9 @@ class ProductsController < ApplicationController
   # 商品価格査定
   def price_recommend
     @product = PriceRecommend.new
+    @category_parent = Category.where(belongs:"parent")
+    gon.children    = Category.where(belongs:"child")
+    gon.g_children  = Category.where(belongs:"g_child")
   end
 
   def price_recommend_result

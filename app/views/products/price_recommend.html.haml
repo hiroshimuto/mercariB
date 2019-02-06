@@ -21,11 +21,11 @@
                   カテゴリー
                   %span.form-require.sell 必須
                 .select-wrap
-                  = f.collection_select :category_id, Category.where(belongs: "parent"), :id, :name, prompt: "---"
-                .select-wrap
-                  = f.collection_select :category_id, Category.where(belongs: "child"), :id, :name, prompt: "---"
-                .select-wrap
-                  = f.collection_select :category_id, Category.where(belongs: "g_child"), :id, :name, prompt: "---"
+                  = f.collection_select :category_id, @category_parent, :id, :name, {prompt: "---"}, {class: "form-parent"}
+                / .select-wrap
+                /   = f.collection_select :category_id, Category.where(ancestry: "child"), :id, :name, prompt: "---"
+                / .select-wrap
+                /   = f.collection_select :category_id, Category.where(belongs: "g_child"), :id, :name, prompt: "---"
           / ブランド ▼
           .sell-form-box
             .form-group
